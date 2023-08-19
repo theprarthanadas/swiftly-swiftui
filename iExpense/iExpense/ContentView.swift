@@ -8,6 +8,54 @@
 import SwiftUI
 
 
+struct ContentView: View {
+    
+    @StateObject var expenses = Expenses()
+    @State private var showingAddExpenses = false
+    
+    var body: some View {
+        NavigationView{
+            List{
+                ForEach(expenses.items) {item in
+                    HStack{
+                        VStack(alignment: .leading){
+                        Text(item.name)
+                                .font(.headline)
+                        Text(item.type)
+                    }
+                    Spacer()
+                        Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            .foregroundColor(item.amount > 10 ? (item.amount > 1000 ? .red : .green) : .blue)
+                }
+                }
+                .onDelete(perform: removeItems(at:))
+           }
+            .navigationTitle("iExpense")
+            .toolbar {
+                Button {
+//                    let expense = ExpenseItem(name: "Test", type: "Personal", amount: 5)
+//                    expenses.items.append(expense)
+                    showingAddExpenses = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+                if(expenses.items.count > 0){
+                    EditButton()
+                }
+            }
+            .sheet(isPresented: $showingAddExpenses){
+                AddView(expenses: expenses)
+            }
+        }
+    }
+    
+    func removeItems(at offsets: IndexSet) {
+        expenses.items.remove(atOffsets: offsets)
+    }
+    
+}
+
+
 /**USING CODABLE TO ARCHIVE OBJECTS IN USERDEFAULTS AND RETRIEVING FROM THE SAME USING JSONENCODER AND JSONDECODER
 
 struct User: Codable {
@@ -193,8 +241,8 @@ struct ContentView: View {
     }
 }
  **/
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
