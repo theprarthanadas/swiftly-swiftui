@@ -6,7 +6,26 @@
 //
 
 import SwiftUI
-/**How ScrollView lets us work with scrolling data**/
+
+
+/**Pushing new views onto the stack using NavigationLink**/
+struct ContentView: View {
+    var body: some View{
+        NavigationView{
+            List(1..<101) { row in
+                NavigationLink{
+                    Text("Row \(row) in detail")
+                } label: {
+                    Text("Row \(row) ")
+                        .padding()
+                }
+                .navigationTitle("SwiftUI")
+            }
+        }
+    }
+}
+
+/**How ScrollView lets us work with scrolling data
 
 
 struct CustomText: View {
@@ -47,6 +66,7 @@ struct ContentView: View {
     }
 }
 
+ **/
 
 /**Resizing images to fit the screen using GeometryReader
 struct ContentView: View {
