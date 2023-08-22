@@ -8,7 +8,44 @@
 import SwiftUI
 
 
-/**Pushing new views onto the stack using NavigationLink**/
+/**Working with hierarchical Codable data**/
+
+
+struct User: Codable{
+    var name: String
+    var address: Address
+}
+
+struct Address: Codable{
+    var street: String
+    var city: String
+}
+
+
+struct ContentView: View {
+    var body: some View {
+        Button("Decode JSON") {
+            let input = """
+            {
+                "name": "Taylor Swift",
+                "address": {
+                    "street": "555, Taylor Swift Avenue",
+                    "city": "Nashville"
+                }
+            }
+            """
+            let data = Data(input.utf8)
+            let decoder = JSONDecoder()
+            if let dataExtracted = try? decoder.decode(User.self, from: data){
+                print(dataExtracted.name)
+            }
+        }
+    }
+}
+
+
+
+/**Pushing new views onto the stack using NavigationLink**
 struct ContentView: View {
     var body: some View{
         NavigationView{
@@ -24,7 +61,9 @@ struct ContentView: View {
         }
     }
 }
-
+*/
+    
+    
 /**How ScrollView lets us work with scrolling data
 
 
