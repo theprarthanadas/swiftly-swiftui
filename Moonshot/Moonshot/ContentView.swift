@@ -8,7 +8,86 @@
 import SwiftUI
 
 
-/**Working with hierarchical Codable data**/
+struct ContentView: View {
+    
+    let astronauts: [String:Astronaut] = Bundle.main.decode("astronauts.json")
+    let missions: [Mission] = Bundle.main.decode("missions.json")
+    let columns = [GridItem(.adaptive(minimum: 150))]
+    
+    var body: some View {
+        NavigationView{
+            ScrollView{
+                LazyVGrid(columns: columns){
+                    ForEach(missions) { mission in
+                        NavigationLink{
+                            MissionView(mission: mission, astronauts: astronauts)
+                        } label: {
+                            VStack{
+                                Image(mission.image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width:100, height: 100)
+                                    .padding()
+                                VStack {
+                                    Text(mission.displayName)
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                    Text(mission.formattedLaunchDate)
+                                        .font(.callout)
+                                        .foregroundColor(.white.opacity(0.5))
+                                }
+                                .padding(.vertical)
+                                .frame(maxWidth: .infinity)
+                                .background(.lightBackground)
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.lightBackground)
+                            )
+                        }
+                    }
+                }
+                .padding([.horizontal, .bottom])
+            }
+            .navigationTitle("Moonshot")
+            .background(.darkBackground)
+            .preferredColorScheme(.dark)
+        }
+    }
+}
+
+
+
+/**How to lay out views in a scrolling grid**
+
+
+struct ContentView: View {
+    var body: some View{
+        //let layout = [GridItem(.fixed(80)), GridItem(.fixed(80)), GridItem(.fixed(80))]
+        let adaptiveLayot = [GridItem(.adaptive(minimum: 80,maximum: 120))]
+        //vertical grid
+        ScrollView{
+            LazyVGrid(columns: adaptiveLayot){
+                ForEach(1..<1001) {
+                    Text("Item \($0)")
+                }
+            }
+        }
+        //horizontal grid
+        ScrollView(.horizontal){
+            LazyHGrid(rows: adaptiveLayot){
+                ForEach(1..<1001) {
+                    Text("Item \($0)")
+                }
+            }
+        }
+        
+    }
+}
+*/
+
+/**Working with hierarchical Codable data**
 
 
 struct User: Codable{
@@ -20,6 +99,7 @@ struct Address: Codable{
     var street: String
     var city: String
 }
+
 
 
 struct ContentView: View {
@@ -43,7 +123,7 @@ struct ContentView: View {
     }
 }
 
-
+*/
 
 /**Pushing new views onto the stack using NavigationLink**
 struct ContentView: View {
